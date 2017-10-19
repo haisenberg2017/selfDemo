@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haisenberg.sys.dao.PermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.haisenberg.sys.model.Permission" >
+    <id column="permission_id" property="permissionId" jdbcType="INTEGER" />
+    <id column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="permission_name" property="permissionName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    permission_id,role_id,permission_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_permission
+    where permission_id = #{permissionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sys_permission
+    where permission_id = #{permissionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.haisenberg.sys.model.Permission" >
+    insert into sys_permission (permission_id,role_id, permission_name)
+    values (#{permissionId,jdbcType=INTEGER},#{roleId,jdbcType=INTEGER}, #{permissionName,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.haisenberg.sys.model.Permission" >
+    update sys_permission
+    set permission_name = #{permissionName,jdbcType=VARCHAR},
+    set role_id = #{roleId,jdbcType=INTEGER}
+    where permission_id = #{permissionId,jdbcType=INTEGER}
+  </update>
+</mapper>

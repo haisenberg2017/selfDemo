@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haisenberg.sys.dao.SysParamMapper" >
+  <resultMap id="BaseResultMap" type="com.haisenberg.sys.model.SysParam" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="param_key" property="paramKey" jdbcType="VARCHAR" />
+    <result column="param_value" property="paramValue" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="seq_id" property="seqId" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, param_key, param_value, description, seq_id, del_flag
+  </sql>
+  <select id="selectParamList"  resultMap="BaseResultMap" >
+     select  
+     <include refid="Base_Column_List" /> 
+     from sys_param
+     where del_flag=0
+    </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_param
+    where id = #{id,jdbcType=INTEGER}
+    and del_flag = 0
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    update sys_param
+    set del_flag = 1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insert" parameterType="com.haisenberg.sys.model.SysParam" >
+    insert into sys_param (id, param_key, param_value, 
+      description, seq_id, del_flag
+      )
+    values (#{id,jdbcType=INTEGER}, #{paramKey,jdbcType=VARCHAR}, #{paramValue,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{seqId,jdbcType=INTEGER}, 0
+      )
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="com.haisenberg.sys.model.SysParam" >
+    update sys_param
+    set param_key = #{paramKey,jdbcType=VARCHAR},
+      param_value = #{paramValue,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      seq_id = #{seqId,jdbcType=INTEGER},
+      del_flag = #{delFlag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

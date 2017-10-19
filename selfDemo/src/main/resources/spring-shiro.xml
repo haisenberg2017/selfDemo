@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans    
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">  
+  	<!-- shiro配置 -->
+    <!-- =========================================================
+         Shiro Core Components - Not Spring Specific
+         ========================================================= -->
+          
+    <!-- Shiro's main business-tier object for web-enabled applications
+         (use DefaultSecurityManager instead when there is no web environment)-->
+      <!-- 定义Shiro安全管理配置 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+         <!--认证管理器-->  
+        <property name="realm" ref="shiroRealm"/>
+        <!-- 缓存管理器 --> 
+        <property name="cacheManager" ref="cacheManager"/>
+        <!-- rememberMe管理器 -->  
+        <property name="rememberMeManager" ref="rememberMeManager"/> 
+    </bean>
+    <!-- 用户授权信息Cache, 采用EhCache，需要的话就配置上此信息      -->   
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">  
+        <property name="cacheManagerConfigFile" value="classpath:ehcache-shiro.xml" />  
+    </bean> 
+ 	 <!-- rememberMe管理器 -->  
+    <bean id="rememberMeManager"  
+        class="org.apache.shiro.web.mgt.CookieRememberMeManager">    
+        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('7gzYfKjTASKdsai43ds==')}"/>    
+         <property name="cookie" ref="rememberMeCookie"/>  
+    </bean> 
+      <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">    
+        <constructor-arg value="rememberMe"/>    
+        <property name="httpOnly" value="true"/>  
+        <property name="maxAge" value="2592000"/><!-- 30天 -->    
+    </bean>
+    <!-- 凭证匹配器     用于一个账号登录失败多次则一个小时禁止登录 -->
+    <bean id="credentialsMatcher" class="com.haisenberg.shiro.matcher.RetryLimitHashedCredentialsMatcher">
+         <constructor-arg ref="cacheManager" />
+         <property name="hashAlgorithmName" value="md5" />
+         <property name="hashIterations" value="2" />
+         <property name="storedCredentialsHexEncoded" value="true" />
+     </bean>  
+     
+	<!-- 自定义realm -->
+    <bean id="shiroRealm" class="com.haisenberg.shiro.realm.ShiroRealm">
+    	<property name="credentialsMatcher" ref="credentialsMatcher" />
+    </bean>
+     <!--用于在实现了Initializable/Destroyable接口的 Shiro bean 初始化时回调-,保证实现了Shiro内部lifecycle函数的bean执行-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+   
+	<!-- 安全认证过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login/toLogin.do"/>
+        <property name="successUrl" value="/menu/menuTree.do"/>
+        <property name="unauthorizedUrl" value="/unauthorized"/>
+        <!-- Shiro权限过滤过滤器 -->
+        <property name="filterChainDefinitions">
+            <value>
+                /css/** = anon
+                /fonts/** = anon
+                /img/** = anon
+                /js/** = anon
+                /login/toLogin.do = anon
+                /login/login.do = anon
+                /WEB-INF/jsp/login.jsp = anon
+                /WEB-INF/jsp/error/404.jsp = anon
+                /WEB-INF/jsp/error/500.jsp = anon
+                # everything else requires authentication:
+                /** = authc
+                /login/logout.do = logout
+            </value>
+        </property>
+    </bean>
+  
+  
+</beans> 
