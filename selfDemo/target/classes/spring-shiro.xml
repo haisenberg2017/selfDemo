@@ -46,9 +46,18 @@
     <bean id="shiroRealm" class="com.haisenberg.shiro.realm.ShiroRealm">
     	<property name="credentialsMatcher" ref="credentialsMatcher" />
     </bean>
+    <!-- 开启shiro注解 -->
      <!--用于在实现了Initializable/Destroyable接口的 Shiro bean 初始化时回调-,保证实现了Shiro内部lifecycle函数的bean执行-->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
-   
+    
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true" />
+    </bean>
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+    
 	<!-- 安全认证过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
