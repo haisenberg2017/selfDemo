@@ -17,7 +17,9 @@
         <!-- 缓存管理器 --> 
         <property name="cacheManager" ref="cacheManager"/>
         <!-- rememberMe管理器 -->  
-        <property name="rememberMeManager" ref="rememberMeManager"/> 
+        <property name="rememberMeManager" ref="rememberMeManager"/>         
+        <!--将session托管给redis进行管理，便于搭建集群系统-->
+        <property name="sessionManager" ref="shiroSessionManager"/>
     </bean>
     <!-- 用户授权信息Cache, 采用EhCache，需要的话就配置上此信息      -->   
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">  
@@ -33,6 +35,29 @@
         <constructor-arg value="rememberMe"/>    
         <property name="httpOnly" value="true"/>  
         <property name="maxAge" value="2592000"/><!-- 30天 -->    
+    </bean>
+    
+    <!--redis管理session-->
+    <bean id="shiroSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionDAO" ref="redisSessionDao"/>
+        <!-- 是否在会话过期后会调用SessionDAO的delete方法删除会话 默认true -->
+        <property name="deleteInvalidSessions" value="true"/>
+        <!-- session 有效时间为半小时 （毫秒单位）-->
+        <property name="globalSessionTimeout" value="1800000"/>
+        <property name="sessionIdCookie" ref="sharesession"/>
+        <property name="sessionIdUrlRewritingEnabled" value="false"/>
+        <!-- 定时检查失效的session -->
+        <property name="sessionValidationSchedulerEnabled" value="true"/>
+    </bean>
+    <bean id="redisSessionDao" class="com.haisenberg.shiro.session.RedisSessionDao">
+        <property name="expire" value="1800"/>
+    </bean>
+    <!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
+    <bean id="sharesession" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <!-- cookie的name,对应的默认是 JSESSIONID -->
+        <constructor-arg name="name" value="SHAREJSESSIONID"/>
+        <!-- jsessionId的path为 / 用于多个系统共享jsessionId -->
+        <property name="path" value="/"/>
     </bean>
     <!-- 凭证匹配器     用于一个账号登录失败多次则一个小时禁止登录 -->
     <bean id="credentialsMatcher" class="com.haisenberg.shiro.matcher.RetryLimitHashedCredentialsMatcher">

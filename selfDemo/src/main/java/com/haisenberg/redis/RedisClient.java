@@ -88,6 +88,7 @@ public class RedisClient {
 		}
 
 	}
+	
 
 	/**
 	 * @Description:设置失效时间
@@ -140,6 +141,57 @@ public class RedisClient {
 		}
 		return flag;
 	}
+	
+	   public static boolean addObjectExpire(String key, Object obj, int seconds){
+			boolean flag=false;
+			Jedis jedis = null;
+			String value = JSONObject.toJSONString(obj);
+			try {
+				jedis = getJedis();
+				String code = jedis.set(key, value);
+				jedis.expire(key, seconds);
+				if (code.equalsIgnoreCase("ok")) {
+					flag=true;
+				}else{
+					flag=false;
+				}
+			} catch (Exception e) {
+				logger.debug("插入数据有异常.");
+				flag=false;
+			} finally {
+				getColse(jedis);
+			}
+			return flag;   
+	    } 
+	   
+	   public static boolean updateObjectExpire(String key, Object obj, int seconds){
+			boolean flag=false;
+			Jedis jedis = null;
+			String value = JSONObject.toJSONString(obj);
+			try {
+				jedis = getJedis();
+				boolean exists = exists(key);
+				if(exists){
+					String code = jedis.set(key, value);
+					jedis.expire(key, seconds);
+					if (code.equalsIgnoreCase("ok")) {
+						flag=true;
+					}else{
+						flag=false;
+					}
+				}else{
+					flag=false;
+				}
+				
+			} catch (Exception e) {
+				logger.debug("更新数据有异常.");
+				flag=false;
+			} finally {
+				getColse(jedis);
+			}
+			return flag;   
+	    } 
+
 
 	/**
 	 * @Description:插入对象
