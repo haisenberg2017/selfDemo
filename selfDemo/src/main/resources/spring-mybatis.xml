@@ -47,7 +47,18 @@
                 <value>classpath:com/haisenberg/mappers/*Mapper.xml</value>
                 <value>classpath:com/haisenberg/sys/mappers/*Mapper.xml</value>
             </array>
-        </property>  
+        </property> 
+        <property name="plugins">
+		  <array>
+		      <bean class="com.github.pagehelper.PageHelper">
+		        <property name="properties">
+		          <value>
+		            dialect=mysql
+		          </value>
+		        </property>
+		      </bean>
+		    </array>
+          </property> 
     </bean>  
   
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->  

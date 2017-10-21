@@ -262,6 +262,12 @@
 			<artifactId>shiro-spring</artifactId>
 			<version>${shiro.version}</version>
 		</dependency>
+		<!-- mybatis-pagehelper分页 -->
+	    <dependency>
+	        <groupId>com.github.pagehelper</groupId>
+	        <artifactId>pagehelper</artifactId>
+	        <version>3.7.5</version>
+	    </dependency> 
     </dependencies>
   <build>
     <finalName>selfDemo</finalName>

@@ -17,6 +17,7 @@
     <link href="${pageContext.request.contextPath}/css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/animate.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/pagination.css" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -133,6 +134,7 @@
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js?v=3.3.6"></script>
     <script src="${pageContext.request.contextPath}/js/content.min.js?v=1.0.0"></script>
     <script src="${pageContext.request.contextPath}/js/plugins/iCheck/icheck.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/jquery.pagination.min.js"></script>
     <script>
         $(document).ready(function(){$(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",})});
     </script>
