@@ -12,6 +12,7 @@ public class TreeVo {
 	private String iconCls;// 图标
 	private String linkUrl;// 链接地址
 	private int tLevel;// 层级
+	private int tSeq;// 顺序
 	private List<TreeVo> children;// 孩子节点集合
 
 
@@ -58,6 +59,12 @@ public class TreeVo {
 		this.tLevel = tLevel;
 	}
 
+	public int gettSeq() {
+		return tSeq;
+	}
+	public void settSeq(int tSeq) {
+		this.tSeq = tSeq;
+	}
 	public List<TreeVo> getChildren() {
 		return children;
 	}

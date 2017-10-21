@@ -18,7 +18,9 @@
     <link href="${pageContext.request.contextPath}/css/animate.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/style.min862f.css?v=4.1.0" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/plugins/treeview/bootstrap-treeview.css" rel="stylesheet">
-
+<style>
+.menu-ul li{float:left;list-style-type:none;}
+</style>
 </head>
 
 <body class="gray-bg">
@@ -55,7 +57,7 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>菜单管理</h5>${menuJson}
+                    <h5>菜单管理</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>

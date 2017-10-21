@@ -79,7 +79,8 @@ public class MenuServiceImpl implements MenuService {
 			for (TreeVo treeVo : treeList) {
 					jsonChildren.append("{");
 				jsonChildren.append("\"id\":\""+treeVo.getId()+"\"");
-				jsonChildren.append(",\"text\":\""+treeVo.getName()+"\"");
+				//jsonChildren.append(",\"text\":\""+treeVo.getName()+"\"");
+				jsonChildren.append(",\"text\":\"<span class='menu-span'><ul class='menu-ul'><li>"+treeVo.getName()+"</li><li>"+treeVo.getLinkUrl()+"</li><li>"+treeVo.gettSeq()+"</li></ul></span>\"");
 				if (treeVo.getChildren() != null && treeVo.getChildren().size() > 0) {
 					jsonChildren.append(",\"nodes\":"+getChildrenJsonArr(treeVo.getChildren(),jsonChildren));
 					jsonChildren.append(",\"hasChild\":true");
@@ -114,6 +115,7 @@ public class MenuServiceImpl implements MenuService {
 			vo.setIconCls(menu.getIconCls());
 			vo.setLinkUrl(menu.getLinkUrl());
 			vo.settLevel(menu.gettLevel());
+			vo.settSeq(menu.getSeqId());
 			List<TreeVo> covertToTree = covertToTree(menu.getMenuId());
 			if(covertToTree!=null&&covertToTree.size()>0){
 				vo.setChildren(covertToTree);	
